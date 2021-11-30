@@ -29,13 +29,13 @@ public class InteractiveBank {
 
     public void interact() {
         Scanner input = new Scanner(System.in);
-        System.out.println("What would you like to do ? \n1) Add a client \n2) Complete an operation for a client\n3) Show the bank report");
+        System.out.println("What would you like to do? \n1) Add a client \n2) Complete an operation for a client\n3) Show the bank report");
         String choice = input.next();
-        if (Objects.equals(choice, "- 1")) {
+        if (Objects.equals(choice, "-1")) {
             this.interactAddClient(input);
-        } else if (Objects.equals(choice, "- 2")) {
-
-        } else if (Objects.equals(choice, "- 3")) {
+        } else if (Objects.equals(choice, "-2")) {
+            this.interactWithClient(input);
+        } else if (Objects.equals(choice, "-3")) {
 
         }
     }
@@ -53,8 +53,7 @@ public class InteractiveBank {
             System.out.println(index + ") " + client.getName());
         }
         String clientIndexBeforeParse = input.next();
-        int clientIndexAfterParse = Integer.parseInt(clientIndexBeforeParse.replaceAll("[- ]", ""));
-        Client chosenClient = this.clients[clientIndexAfterParse - 1];
+        Client chosenClient = this.clients[choiceIndex(clientIndexBeforeParse)];
         System.out.println("Choose the operation : \n1) Show balance\n2) Make withdrawal\n3) Make deposit\n4) Transfer Money");
         String chooseOperation = input.next();
 
@@ -62,29 +61,36 @@ public class InteractiveBank {
             System.out.println(chosenClient.getTotalBalance());
 
         } else if (Objects.equals(chooseOperation, "-2")) {
-            StringBuilder promptString = new StringBuilder("Which client account?");
-            for(Account account : chosenClient.clientAccounts) {
-                promptString.append("1) ").append(account.getAccountNumber()).append("\n");
-            }
-            System.out.println(promptString);
-            String accountIndexBeforeParse = input.next();
-            int accountIndexAfterParse = Integer.parseInt(accountIndexBeforeParse.replaceAll("[- ]", ""));
-            Account chosenAccount = chosenClient.clientAccounts[accountIndexAfterParse - 1];
-            System.out.println("What amount of money?");
+
+            Account chosenAccount = this.clientOperationInit(chosenClient, input);
+            System.out.println("How much do you want to deposit?");
             chosenAccount.deposit(input.nextFloat());
+
+
         } else if (Objects.equals(chooseOperation, "-3")) {
-            StringBuilder promptString = new StringBuilder("Which client account?");
-            for(Account account : chosenClient.clientAccounts) {
-                promptString.append("1) ").append(account.getAccountNumber()).append("\n");
-            }
-            System.out.println(promptString);
-            String accountIndexBeforeParse = input.next();
-            int accountIndexAfterParse = Integer.parseInt(accountIndexBeforeParse.replaceAll("[- ]", ""));
-            Account chosenAccount = chosenClient.clientAccounts[accountIndexAfterParse - 1];
-            System.out.println("What amount of money?");
+
+            Account chosenAccount = this.clientOperationInit(chosenClient, input);
+            System.out.println("How much do you want to withdraw?");
             chosenAccount.withdrawal(input.nextFloat());
+
         } else if (Objects.equals(chooseOperation, "-4")) {
             //TODO : Refactorisé ce qu'il y a plus haut
         }
+    }
+
+    private Account clientOperationInit(Client chosenClient, Scanner input) {
+        StringBuilder promptString = new StringBuilder("Which client account?");
+        int index = 1;
+        for(Account account : chosenClient.clientAccounts) {
+            promptString.append(index).append(") ").append(account.getAccountNumber()).append("\n");
+            index++;
+        }
+        System.out.println(promptString);
+        String accountIndexBeforeParse = input.next();
+        return chosenClient.clientAccounts[this.choiceIndex(accountIndexBeforeParse)];
+    }
+
+    private int choiceIndex(String input) {
+        return Integer.parseInt(input.replace("-", "")) - 1;
     }
 }
