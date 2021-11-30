@@ -3,12 +3,16 @@ package fr.exercice.banque;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Account {
-    private int accountNumber = ThreadLocalRandom.current().nextInt(0, 100000000 + 1);
+    private final int accountNumber = ThreadLocalRandom.current().nextInt(0, 100000000 + 1);
 
     private float balance;
 
     public void deposit(float amount) {
         this.balance += amount;
+    }
+
+    public int getAccountNumber() {
+        return this.accountNumber;
     }
 
     public void withdrawal(float amount) {

@@ -35,6 +35,8 @@ public class InteractiveBank {
             this.interactAddClient(input);
         } else if (Objects.equals(choice, "- 2")) {
 
+        } else if (Objects.equals(choice, "- 3")) {
+
         }
     }
 
@@ -47,19 +49,42 @@ public class InteractiveBank {
     private void interactWithClient(Scanner input) {
         System.out.println("Choose the client : ");
         int index = 1;
-        for(Client client : this.clients) {
+        for (Client client : this.clients) {
             System.out.println(index + ") " + client.getName());
         }
         String clientIndexBeforeParse = input.next();
-        int clientIndexAfterParse = Integer.parseInt(clientIndexBeforeParse.replaceAll("[- ]",""));
-        Client chosenClient = this.clients[clientIndexAfterParse -1];
+        int clientIndexAfterParse = Integer.parseInt(clientIndexBeforeParse.replaceAll("[- ]", ""));
+        Client chosenClient = this.clients[clientIndexAfterParse - 1];
         System.out.println("Choose the operation : \n1) Show balance\n2) Make withdrawal\n3) Make deposit\n4) Transfer Money");
         String chooseOperation = input.next();
+
         if (Objects.equals(chooseOperation, "-1")) {
+            System.out.println(chosenClient.getTotalBalance());
 
         } else if (Objects.equals(chooseOperation, "-2")) {
-
+            StringBuilder promptString = new StringBuilder("Which client account?");
+            for(Account account : chosenClient.clientAccounts) {
+                promptString.append("1) ").append(account.getAccountNumber()).append("\n");
+            }
+            System.out.println(promptString);
+            String accountIndexBeforeParse = input.next();
+            int accountIndexAfterParse = Integer.parseInt(accountIndexBeforeParse.replaceAll("[- ]", ""));
+            Account chosenAccount = chosenClient.clientAccounts[accountIndexAfterParse - 1];
+            System.out.println("What amount of money?");
+            chosenAccount.deposit(input.nextFloat());
+        } else if (Objects.equals(chooseOperation, "-3")) {
+            StringBuilder promptString = new StringBuilder("Which client account?");
+            for(Account account : chosenClient.clientAccounts) {
+                promptString.append("1) ").append(account.getAccountNumber()).append("\n");
+            }
+            System.out.println(promptString);
+            String accountIndexBeforeParse = input.next();
+            int accountIndexAfterParse = Integer.parseInt(accountIndexBeforeParse.replaceAll("[- ]", ""));
+            Account chosenAccount = chosenClient.clientAccounts[accountIndexAfterParse - 1];
+            System.out.println("What amount of money?");
+            chosenAccount.withdrawal(input.nextFloat());
+        } else if (Objects.equals(chooseOperation, "-4")) {
+            //TODO : Refactorisé ce qu'il y a plus haut
         }
-
     }
 }
