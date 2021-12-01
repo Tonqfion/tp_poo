@@ -48,9 +48,9 @@ public class InteractiveBank {
 
     private void interactWithClient(Scanner input) {
         System.out.println("Choose the client : ");
-        int index = 1;
+        int indexClient = 1;
         for (Client client : this.clients) {
-            System.out.println(index + ") " + client.getName());
+            System.out.println(indexClient + ") " + client.getName());
         }
         String clientIndexBeforeParse = input.next();
         Client chosenClient = this.clients[choiceIndex(clientIndexBeforeParse)];
@@ -74,7 +74,22 @@ public class InteractiveBank {
             chosenAccount.withdrawal(input.nextFloat());
 
         } else if (Objects.equals(chooseOperation, "-4")) {
-            //TODO : Refactorisé ce qu'il y a plus haut
+            Account chosenAccount = this.clientOperationInit(chosenClient, input);
+            System.out.println("How much do you want to transfer?");
+            float amount = input.nextFloat();
+            System.out.println("Who do you want to transfer the money to?");
+
+            System.out.println("Choose the recipient: ");
+            int indexRecipient = 1;
+            for (Client client : this.clients) {
+                System.out.println(indexRecipient + ") " + client.getName());
+            }
+
+            String recipientIndexBeforeParse = input.next();
+            Client recipient = this.clients[choiceIndex(recipientIndexBeforeParse)];
+            Account recipientAccount = this.clientOperationInit(recipient, input);
+            chosenAccount.transferMoney(amount,recipientAccount);
+
         }
     }
 

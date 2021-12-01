@@ -1,11 +1,12 @@
 package fr.exercice.banque;
 
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Client {
 
     public Account[] clientAccounts = new Account[100];
-    private int clientNumber = ThreadLocalRandom.current().nextInt(0, 100000000 + 1);
+    private final int clientNumber = ThreadLocalRandom.current().nextInt(0, 100000000 + 1);
     private int nbrOfAccounts = 0;
     private final String name;
 
@@ -22,7 +23,7 @@ public class Client {
     }
 
     public void addAccount(){
-        this.clientAccounts[this.nbrOfAccounts] = new Account();
+        this.clientAccounts[this.nbrOfAccounts] = new Account(1000, false);
         this.nbrOfAccounts++;
     }
 
@@ -36,5 +37,23 @@ public class Client {
             totalBalance += account.getBalance();
         }
         return totalBalance;
+    }
+
+    public void setMainAccount(){
+        boolean hasMainAccount = false;
+        for(Account account : this.clientAccounts) {
+            if (account.getIsMainAccount()) {
+                hasMainAccount = true;
+                break;
+            }
+        }
+
+        if (hasMainAccount) {
+            System.out.println("The client already has a main account");
+        }
+    }
+
+    public void replenish() {
+
     }
 }
